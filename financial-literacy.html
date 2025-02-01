@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financial Literacy - Finance App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  <!-- Header -->
+  <header class="bg-white shadow-md">
+    <div class="container mx-auto flex justify-between items-center p-4">
+      <div class="flex items-center">
+        <img src="assets/logo.png" alt="Finance App Logo" class="h-10 mr-2">
+        <h1 class="text-2xl font-bold text-gray-800">Finance App</h1>
+      </div>
+      <nav>
+        <ul class="flex space-x-6">
+          <li><a href="index.html" class="text-gray-700 hover:text-green-500 transition duration-300">Home</a></li>
+          <li><a href="finance-management.html" class="text-gray-700 hover:text-green-500 transition duration-300">Finance Management</a></li>
+          <li><a href="login.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto p-6">
+    <h2 class="text-4xl font-bold text-gray-800 mb-8">Financial Literacy</h2>
+
+    <!-- Course Progression -->
+    <div class="space-y-6">
+      <!-- Course 1 -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-2xl font-bold text-gray-800 mb-2">1. Basics of Saving</h3>
+        <p class="text-gray-600 mb-4">Learn the fundamentals of saving money and building a strong financial foundation.</p>
+        <div class="flex items-center justify-between">
+          <div class="w-3/4 bg-gray-200 rounded-full h-2.5">
+            <div class="bg-green-500 h-2.5 rounded-full" style="width: 0%;" id="progress-1"></div>
+          </div>
+          <button class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition duration-300" onclick="startCourse(1)">Start</button>
+        </div>
+      </div>
+
+      <!-- Course 2 -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-2xl font-bold text-gray-800 mb-2">2. Understanding Investments</h3>
+        <p class="text-gray-600 mb-4">Discover how to grow your wealth through smart investments.</p>
+        <div class="flex items-center justify-between">
+          <div class="w-3/4 bg-gray-200 rounded-full h-2.5">
+            <div class="bg-green-500 h-2.5 rounded-full" style="width: 0%;" id="progress-2"></div>
+          </div>
+          <button class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition duration-300" onclick="startCourse(2)" disabled>Locked</button>
+        </div>
+      </div>
+
+      <!-- Course 3 -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-2xl font-bold text-gray-800 mb-2">3. Debt Management</h3>
+        <p class="text-gray-600 mb-4">Learn how to manage and pay off debt effectively.</p>
+        <div class="flex items-center justify-between">
+          <div class="w-3/4 bg-gray-200 rounded-full h-2.5">
+            <div class="bg-green-500 h-2.5 rounded-full" style="width: 0%;" id="progress-3"></div>
+          </div>
+          <button class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition duration-300" onclick="startCourse(3)" disabled>Locked</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz Modal (Hidden by Default) -->
+    <div id="quiz-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+      <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+        <h3 class="text-2xl font-bold text-gray-800 mb-4" id="quiz-title">Quiz</h3>
+        <div id="quiz-questions" class="space-y-4">
+          <!-- Quiz questions will be dynamically inserted here -->
+        </div>
+        <button class="mt-6 w-full bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition duration-300" onclick="submitQuiz()">Submit</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- JavaScript for Gamified Courses -->
+  <script>
+    // Track user progress
+    let userProgress = {
+      course1: { completed: false, progress: 0 },
+      course2: { completed: false, progress: 0 },
+      course3: { completed: false, progress: 0 },
+    };
+
+    // Quiz data for each course
+    const quizzes = {
+      course1: [
+        {
+          question: "What is the first step to saving money?",
+          options: ["Spend less than you earn", "Invest in stocks", "Take a loan"],
+          answer: "Spend less than you earn",
+        },
+        {
+          question: "Why is an emergency fund important?",
+          options: ["To buy luxury items", "To cover unexpected expenses", "To invest in real estate"],
+          answer: "To cover unexpected expenses",
+        },
+      ],
+      course2: [
+        {
+          question: "What is a stock?",
+          options: ["A type of debt", "A share in a company", "A savings account"],
+          answer: "A share in a company",
+        },
+        {
+          question: "What is diversification?",
+          options: ["Investing in one asset", "Spreading investments across different assets", "Saving money in a bank"],
+          answer: "Spreading investments across different assets",
+        },
+      ],
+      course3: [
+        {
+          question: "What is the best way to pay off debt?",
+          options: ["Pay the minimum amount", "Use the snowball method", "Ignore it"],
+          answer: "Use the snowball method",
+        },
+        {
+          question: "What is a credit score?",
+          options: ["A measure of your debt", "A measure of your creditworthiness", "A type of loan"],
+          answer: "A measure of your creditworthiness",
+        },
+      ],
+    };
+
+    // Start a course
+    function startCourse(courseNumber) {
+      const courseKey = `course${courseNumber}`;
+      if (userProgress[courseKey].completed) return;
+
+      // Show quiz for the course
+      showQuiz(courseKey);
+    }
+
+    // Show quiz modal
+    function showQuiz(courseKey) {
+      const quizModal = document.getElementById('quiz-modal');
+      const quizQuestions = document.getElementById('quiz-questions');
+      const quizTitle = document.getElementById('quiz-title');
+
+      // Set quiz title
+      quizTitle.textContent = `Quiz: ${courseKey.replace('course', 'Course ')}`;
+
+      // Clear previous questions
+      quizQuestions.innerHTML = '';
+
+      // Add quiz questions
+      quizzes[courseKey].forEach((question, index) => {
+        const questionHTML = `
+          <div class="quiz-question">
+            <p class="font-semibold text-gray-800">${index + 1}. ${question.question}</p>
+            <div class="space-y-2 mt-2">
+              ${question.options
+                .map(
+                  (option) => `
+                    <label class="flex items-center space-x-2">
+                      <input type="radio" name="question${index}" value="${option}" class="form-radio">
+                      <span>${option}</span>
+                    </label>
+                  `
+                )
+                .join('')}
+            </div>
+          </div>
+        `;
+        quizQuestions.innerHTML += questionHTML;
+      });
+
+      // Show the modal
+      quizModal.classList.remove('hidden');
+    }
+
+    // Submit quiz
+    function submitQuiz() {
+      const quizModal = document.getElementById('quiz-modal');
+      const courseKey = `course${quizModal.dataset.course}`;
+
+      // Calculate score
+      let score = 0;
+      quizzes[courseKey].forEach((question, index) => {
+        const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
+        if (selectedOption && selectedOption.value === question.answer) {
+          score++;
+        }
+      });
+
+      // Update progress
+      userProgress[courseKey].progress = (score / quizzes[courseKey].length) * 100;
+      if (userProgress[courseKey].progress === 100) {
+        userProgress[courseKey].completed = true;
+        unlockNextCourse(courseKey);
+      }
+
+      // Update progress bar
+      updateProgressBar(courseKey);
+
+      // Hide the modal
+      quizModal.classList.add('hidden');
+    }
+
+    // Unlock the next course
+    function unlockNextCourse(courseKey) {
+      const nextCourseNumber = parseInt(courseKey.replace('course', '')) + 1;
+      const nextCourseButton = document.querySelector(`button[onclick="startCourse(${nextCourseNumber})"]`);
+      if (nextCourseButton) {
+        nextCourseButton.disabled = false;
+        nextCourseButton.textContent = 'Start';
+      }
+    }
+
+    // Update progress bar
+    function updateProgressBar(courseKey) {
+      const progressBar = document.getElementById(`progress-${courseKey.replace('course', '')}`);
+      if (progressBar) {
+        progressBar.style.width = `${userProgress[courseKey].progress}%`;
+      }
+    }
+  </script>
+</body>
+</html>

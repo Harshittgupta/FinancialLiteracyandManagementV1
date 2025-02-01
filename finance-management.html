@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finance Management - Finance App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ 
+</head>
+<body class="bg-gray-100">
+  <!-- Header -->
+  <header class="bg-white shadow-md">
+    <div class="container mx-auto flex justify-between items-center p-4">
+      <div class="flex items-center">
+        <img src="assets/logo.png" alt="Finance App Logo" class="h-10 mr-2">
+        <h1 class="text-2xl font-bold text-gray-800">Finance App</h1>
+      </div>
+      <nav>
+        <ul class="flex space-x-6">
+          <li><a href="index.html" class="text-gray-700 hover:text-green-500 transition duration-300">Home</a></li>
+          <li><a href="financial-literacy.html" class="text-gray-700 hover:text-green-500 transition duration-300">Financial Literacy</a></li>
+          <li><a href="login.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto p-6">
+    <!-- Introduction Section -->
+    <section class="mb-12 text-center">
+      <h2 class="text-4xl font-bold text-gray-800 mb-4">Finance Management</h2>
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        Take control of your finances with our powerful tools. Whether you're budgeting, tracking expenses, or converting currencies, we've got you covered.
+      </p>
+      <div class="mt-8 flex justify-center space-x-4">
+        <a href="#budgeting-tool" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition duration-300">Budgeting Tool</a>
+        <a href="#currency-converter" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300">Currency Converter</a>
+      </div>
+    </section>
+
+    <!-- Budgeting Tool Section -->
+    <section id="budgeting-tool" class="mb-12">
+      <div class="bg-white p-8 rounded-lg shadow-lg">
+        <h3 class="text-3xl font-bold text-gray-800 mb-6">Budgeting Tool</h3>
+        <div class="flex flex-wrap sm:flex-nowrap gap-8">
+          <!-- Pie Chart -->
+          <div class="w-full sm:w-1/3">
+            <h4 class="text-xl font-semibold text-gray-800 mb-4">Monthly Budget Overview</h4>
+            <canvas id="pieChart" class="w-full h-64"></canvas>
+            <button id="net-income" class="mt-6 w-full py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300">
+              NET INCOME: $<span id="net-income-amount">0</span>
+            </button>
+          </div>
+
+          <!-- Form Container -->
+          <div class="w-full sm:w-2/3">
+            <!-- Progress Bar -->
+            <div class="progress-bar flex items-center justify-between mb-8">
+              <div class="step flex flex-col items-center">
+                <div class="circle w-10 h-10 flex items-center justify-center bg-green-500 text-white rounded-full font-bold">1</div>
+                <p class="mt-2 text-sm">Income</p>
+              </div>
+              <div class="line flex-grow h-1 bg-gray-300 mx-2"></div>
+              <div class="step flex flex-col items-center">
+                <div class="circle w-10 h-10 flex items-center justify-center bg-gray-300 text-purple-700 rounded-full font-bold">2</div>
+                <p class="mt-2 text-sm">Housing</p>
+              </div>
+              <div class="line flex-grow h-1 bg-gray-300 mx-2"></div>
+              <div class="step flex flex-col items-center">
+                <div class="circle w-10 h-10 flex items-center justify-center bg-gray-300 text-purple-700 rounded-full font-bold">3</div>
+                <p class="mt-2 text-sm">Transportation</p>
+              </div>
+              <div class="line flex-grow h-1 bg-gray-300 mx-2"></div>
+              <div class="step flex flex-col items-center">
+                <div class="circle w-10 h-10 flex items-center justify-center bg-gray-300 text-purple-700 rounded-full font-bold">4</div>
+                <p class="mt-2 text-sm">Educational</p>
+              </div>
+              <div class="line flex-grow h-1 bg-gray-300 mx-2"></div>
+              <div class="step flex flex-col items-center">
+                <div class="circle w-10 h-10 flex items-center justify-center bg-gray-300 text-purple-700 rounded-full font-bold">5</div>
+                <p class="mt-2 text-sm">Personal</p>
+              </div>
+              <div class="line flex-grow h-1 bg-gray-300 mx-2"></div>
+              <div class="step flex flex-col items-center">
+                <div class="circle w-10 h-10 flex items-center justify-center bg-gray-300 text-purple-700 rounded-full font-bold">6</div>
+                <p class="mt-2 text-sm">Savings</p>
+              </div>
+            </div>
+
+            <!-- Forms for Each Step -->
+            <div class="form-steps">
+              <!-- Step 1: Income -->
+              <div class="form-step active">
+                <h4 class="text-2xl font-bold mb-4">Monthly Income</h4>
+                <label for="salary" class="block text-sm mb-2">Salary/Wages</label>
+                <input type="number" id="salary" placeholder="Enter salary" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="other-income" class="block text-sm mb-2">Other Income</label>
+                <input type="number" id="other-income" placeholder="Enter other income" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <div class="form-buttons flex justify-end">
+                  <button class="next-step px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300">Next</button>
+                </div>
+              </div>
+
+              <!-- Step 2: Housing -->
+              <div class="form-step hidden">
+                <h4 class="text-2xl font-bold mb-4">Housing Expenses</h4>
+                <label for="mortgage" class="block text-sm mb-2">Mortgage</label>
+                <input type="number" id="mortgage" placeholder="Enter mortgage amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="rent" class="block text-sm mb-2">Rent</label>
+                <input type="number" id="rent" placeholder="Enter rent amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="home-insurance" class="block text-sm mb-2">Home Insurance</label>
+                <input type="number" id="insurance" placeholder="Enter Home Insurance amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="Repairs/Maintenance" class="block text-sm mb-2">Repairs/Maintenance</label>
+                <input type="number" id="repairs" placeholder="Enter Repairs/Maintenance amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="Water/Gas/Electricity" class="block text-sm mb-2">Water/Gas/Electricity</label>
+                <input type="number" id="Water/Gas/Electricity" placeholder="Enter Water/Gas/Electricity amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="Cable/tv/internet" class="block text-sm mb-2">Cable/tv/internet</label>
+                <input type="number" id="Cable/tv/internet" placeholder="Enter Cable/tv/internet amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="Phone/Cell" class="block text-sm mb-2">Phone/Cell</label>
+                <input type="number" id="Phone/Cell" placeholder="Enter Phone/Cell amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <div class="form-buttons flex justify-between">
+                  <button class="prev-step px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-300">Back</button>
+                  <button class="next-step px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300">Next</button>
+                </div>
+              </div>
+
+              <!-- Step 3: Transportation -->
+              <div class="form-step hidden">
+                <h4 class="text-2xl font-bold mb-4">Transportation Expenses</h4>
+                <label for="car-payment" class="block text-sm mb-2">Car Payment</label>
+                <input type="number" id="car-payment" placeholder="Enter car payment" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="fuel" class="block text-sm mb-2">Gas/Fuel</label>
+                <input type="number" id="fuel" placeholder="Enter fuel amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="Car Insurance" class="block text-sm mb-2">Car Insurance</label>
+                <input type="number" id="car-insurance" placeholder="Enter Car Insurance amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="Car Repairs" class="block text-sm mb-2">Car Repairs</label>
+                <input type="number" id="car-repairs" placeholder="Enter Car Repairs amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <div class="form-buttons flex justify-between">
+                  <button class="prev-step px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-300">Back</button>
+                  <button class="next-step px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300">Next</button>
+                </div>
+              </div>
+
+              <!-- Step 4: Educational -->
+              <div class="form-step hidden">
+                <h4 class="text-2xl font-bold mb-4">Educational Expenses</h4>
+                <label for="student-loan" class="block text-sm mb-2">Student Loan</label>
+                <input type="number" id="student-loan" placeholder="Enter student loan amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="books" class="block text-sm mb-2">Books & Supplies</label>
+                <input type="number" id="books" placeholder="Enter books amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="College Tuition" class="block text-sm mb-2">College Tuition</label>
+                <input type="number" id="college-tuition" placeholder="Enter College Tuition amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <div class="form-buttons flex justify-between">
+                  <button class="prev-step px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-300">Back</button>
+                  <button class="next-step px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300">Next</button>
+                </div>
+              </div>
+
+              <!-- Step 5: Personal -->
+              <div class="form-step hidden">
+                <h4 class="text-2xl font-bold mb-4">Personal & Food Expenses</h4>
+                <label for="groceries" class="block text-sm mb-2">Groceries</label>
+                <input type="number" id="groceries" placeholder="Enter groceries amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="entertainment" class="block text-sm mb-2">Entertainment</label>
+                <input type="number" id="entertainment" placeholder="Enter entertainment amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="Clothing" class="block text-sm mb-2">Clothing</label>
+                <input type="number" id="clothing" placeholder="Enter Clothing amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="Medical" class="block text-sm mb-2">Medical</label>
+                <input type="number" id="medical" placeholder="Enter Medical amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="Pet supplies" class="block text-sm mb-2">Pet supplies</label>
+                <input type="number" id="pet-supplies" placeholder="Enter Pet supplies amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="other" class="block text-sm mb-2">Other expenses</label>
+                <input type="number" id="other" placeholder="Enter other amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <div class="form-buttons flex justify-between">
+                  <button class="prev-step px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-300">Back</button>
+                  <button class="next-step px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300">Next</button>
+                </div>
+              </div>
+
+              <!-- Step 6: Savings -->
+              <div class="form-step hidden">
+                <h4 class="text-2xl font-bold mb-4">Monthly Savings</h4>
+                <label for="retirement" class="block text-sm mb-2">Retirement Savings</label>
+                <input type="number" id="retirement" placeholder="Enter retirement savings" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="emergency-fund" class="block text-sm mb-2">Emergency Fund</label>
+                <input type="number" id="emergency-fund" placeholder="Enter emergency fund amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="Investments" class="block text-sm mb-2">Investments</label>
+                <input type="number" id="investments" placeholder="Enter Investments amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <div class="form-buttons flex justify-between">
+                  <button class="prev-step px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-300">Back</button>
+                  <button type="submit" class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300">Submit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script>
+      const steps = document.querySelectorAll('.form-step');
+      const nextButtons = document.querySelectorAll('.next-step');
+      const prevButtons = document.querySelectorAll('.prev-step');
+      const progressCircles = document.querySelectorAll('.circle');
+      let currentStep = 0;
+    
+      // Function to show the current step
+      function showStep(step) {
+        steps.forEach((formStep, index) => {
+          formStep.classList.toggle('hidden', index !== step);
+          formStep.classList.toggle('active', index === step);
+        });
+        progressCircles.forEach((circle, index) => {
+          circle.classList.toggle('bg-green-500', index <= step);
+          circle.classList.toggle('bg-gray-300', index > step);
+        });
+      }
+    
+      // Global object to store budget data
+      const budgetData = {
+        income: 0,
+        housing: 0,
+        transportation: 0,
+        education: 0,
+        personal: 0,
+        savings: 0,
+      };
+    
+      // Pie Chart Initialization
+      const ctx = document.getElementById('pieChart').getContext('2d');
+      const pieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['Income', 'Housing', 'Transportation', 'Education', 'Personal', 'Savings'],
+          datasets: [
+            {
+              data: [0, 0, 0, 0, 0, 0],
+              backgroundColor: ['#4CAF50', '#FF9800', '#2196F3', '#FFC107', '#E91E63', '#9C27B0'],
+              borderWidth: 0, // Removes the white border around pie chart segments
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: 'black', // Set legend label color to black
+                font: {
+                  size: 14, // Optional: Adjust font size for better visibility
+                },
+              },
+            },
+          },
+        },
+      });
+    
+      // Function to update the pie chart
+      function updateChart() {
+        pieChart.data.datasets[0].data = Object.values(budgetData);
+        pieChart.update();
+      }
+    
+      // Function to calculate net income
+      function calculateNetIncome() {
+        const income = parseFloat(document.getElementById('salary').value || 0) + parseFloat(document.getElementById('other-income').value || 0);
+        const expenses =
+          budgetData.housing +
+          budgetData.transportation +
+          budgetData.education +
+          budgetData.personal +
+          budgetData.savings;
+        const netIncome = income - expenses;
+        document.getElementById('net-income-amount').textContent = netIncome.toFixed(2);
+      }
+    
+      // Event listeners for "Next" buttons
+      nextButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          // Update budget data based on the current step
+          if (currentStep === 0) {
+            budgetData.income =
+              parseFloat(document.getElementById('salary').value || 0) +
+              parseFloat(document.getElementById('other-income').value || 0);
+          } else if (currentStep === 1) {
+            budgetData.housing =
+              parseFloat(document.getElementById('mortgage').value || 0) +
+              parseFloat(document.getElementById('rent').value || 0) +
+              parseFloat(document.getElementById('insurance').value || 0) +
+              parseFloat(document.getElementById('repairs').value || 0) +
+              parseFloat(document.getElementById('Water/Gas/Electricity').value || 0) +
+              parseFloat(document.getElementById('Cable/tv/internet').value || 0) +
+              parseFloat(document.getElementById('Phone/Cell').value || 0);
+          } else if (currentStep === 2) {
+            budgetData.transportation =
+              parseFloat(document.getElementById('car-payment').value || 0) +
+              parseFloat(document.getElementById('fuel').value || 0) +
+              parseFloat(document.getElementById('car-insurance').value || 0) +
+              parseFloat(document.getElementById('car-repairs').value || 0);
+          } else if (currentStep === 3) {
+            budgetData.education =
+              parseFloat(document.getElementById('student-loan').value || 0) +
+              parseFloat(document.getElementById('books').value || 0) +
+              parseFloat(document.getElementById('college-tuition').value || 0);
+          } else if (currentStep === 4) {
+            budgetData.personal =
+              parseFloat(document.getElementById('groceries').value || 0) +
+              parseFloat(document.getElementById('entertainment').value || 0) +
+              parseFloat(document.getElementById('clothing').value || 0) +
+              parseFloat(document.getElementById('medical').value || 0) +
+              parseFloat(document.getElementById('pet-supplies').value || 0) +
+              parseFloat(document.getElementById('other').value || 0);
+          } else if (currentStep === 5) {
+            budgetData.savings =
+              parseFloat(document.getElementById('retirement').value || 0) +
+              parseFloat(document.getElementById('emergency-fund').value || 0) +
+              parseFloat(document.getElementById('investments').value || 0);
+          }
+    
+          // Move to the next step
+          if (currentStep < steps.length - 1) {
+            currentStep++;
+            showStep(currentStep);
+            updateChart();
+            calculateNetIncome();
+          }
+        });
+      });
+    
+      // Event listeners for "Back" buttons
+      prevButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          if (currentStep > 0) {
+            currentStep--;
+            showStep(currentStep);
+          }
+        });
+      });
+    
+      // Initialize the first step and chart
+      showStep(currentStep);
+      updateChart();
+    </script>
+<!-- Currency Converter Section -->
+<section id="currency-converter" class="mb-12">
+  <div class="bg-white p-8 rounded-lg shadow-lg">
+    <h3 class="text-3xl font-bold text-gray-800 mb-6">Currency Converter</h3>
+    <form id="currency-form" class="space-y-4">
+      <!-- Amount Input -->
+      <label for="amount" class="block text-sm mb-2">Amount:</label>
+      <input type="number" id="amount" placeholder="Enter amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4" required>
+
+      <!-- From Currency Dropdown -->
+      <label for="from" class="block text-sm mb-2">From:</label>
+      <select id="from" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4" required>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="INR">INR</option>
+        <option value="GBP">GBP</option>
+        <option value="JPY">JPY</option>
+        <option value="AUD">AUD</option>
+      </select>
+
+      <!-- To Currency Dropdown -->
+      <label for="to" class="block text-sm mb-2">To:</label>
+      <select id="to" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4" required>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="INR">INR</option>
+        <option value="GBP">GBP</option>
+        <option value="JPY">JPY</option>
+        <option value="AUD">AUD</option>
+      </select>
+
+      <!-- Convert Button -->
+      <button type="submit" class="w-full bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300">Convert</button>
+    </form>
+
+    <!-- Conversion Result -->
+    <div id="conversion-result" class="mt-6 text-center text-xl font-semibold text-gray-800"></div>
+  </div>
+</section>
+
+<!-- JavaScript for Currency Converter -->
+<script>
+  // Mock exchange rates (replace with real API later)
+  const exchangeRates = {
+    USD: 1,
+    EUR: 0.85,
+    INR: 75,
+    GBP: 0.73,
+    JPY: 110,
+    AUD: 1.35,
+  };
+
+  // Currency Converter Form Submission
+  document.getElementById('currency-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // Get input values
+    const amount = parseFloat(document.getElementById('amount').value);
+    const fromCurrency = document.getElementById('from').value;
+    const toCurrency = document.getElementById('to').value;
+
+    // Validate amount
+    if (isNaN(amount) || amount <= 0) {
+      alert('Please enter a valid amount.');
+      return;
+    }
+
+    // Perform conversion
+    const fromRate = exchangeRates[fromCurrency];
+    const toRate = exchangeRates[toCurrency];
+    const convertedAmount = (amount / fromRate) * toRate;
+
+    // Display result
+    const resultElement = document.getElementById('conversion-result');
+    resultElement.textContent = `${amount.toFixed(2)} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}`;
+  });
+</script>

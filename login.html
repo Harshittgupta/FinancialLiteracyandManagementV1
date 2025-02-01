@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Finance App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-green-400 to-blue-500 min-h-screen flex items-center justify-center">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-96 text-center">
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">Welcome to Finance App</h1>
+    <p class="text-gray-600 mb-6">Your journey to financial literacy and management starts here.</p>
+
+    <!-- Login Form -->
+    <form id="login-form" class="mb-6">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">Login</h2>
+      <input type="text" id="username" placeholder="Username" class="w-full p-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+      <input type="password" id="password" placeholder="Password" class="w-full p-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+      <button type="submit" class="w-full bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition duration-300">Login</button>
+    </form>
+
+    <!-- Google Login -->
+    <button id="google-login" class="w-full bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition duration-300 mb-6">Sign in with Google</button>
+
+    <!-- Registration Form -->
+    <form id="register-form" class="mb-6">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">Register</h2>
+      <input type="text" id="new-username" placeholder="Username" class="w-full p-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+      <input type="password" id="new-password" placeholder="Password" class="w-full p-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+      <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition duration-300">Register</button>
+    </form>
+
+    <!-- Skip to Landing Page -->
+    <button id="skip-login" onclick="window.location.href='index.html'" class="text-gray-600 hover:text-gray-800 transition duration-300">Skip to Landing Page</button>
+  </div>
+
+  <script src="scripts/main.js"></script>
+</body>
+</html>

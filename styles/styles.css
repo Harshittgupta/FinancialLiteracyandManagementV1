@@ -1,0 +1,59 @@
+/* Login Page Styles */
+.login-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.login-container h1 {
+  margin-bottom: 20px;
+}
+
+.login-container form {
+  margin-bottom: 20px;
+}
+
+.login-container button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.login-container #skip-login {
+  background: #777;
+}
+
+.login-container #skip-login:hover {
+  background: #999;
+}
+
+/* CTA Button Styles */
+.cta-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #333;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.cta-button:hover {
+  background: #555;
+}
+
+/* Login Button Styles */
+.login-button {
+  background: #333;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.login-button:hover {
+  background: #555;
+}
