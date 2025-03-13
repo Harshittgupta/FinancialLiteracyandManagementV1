@@ -3,37 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Finance App</title>
+  <title>Login - Finance Guru</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom gradient background */
+    .login-hero {
+      background: linear-gradient(to right, #4F46E5, #9333EA);
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-r from-green-400 to-blue-500 min-h-screen flex items-center justify-center">
-  <div class="bg-white p-8 rounded-lg shadow-lg w-96 text-center">
-    <h1 class="text-3xl font-bold text-gray-800 mb-4">Welcome to Finance App</h1>
-    <p class="text-gray-600 mb-6">Your journey to financial literacy and management starts here.</p>
+<body class="bg-gray-100">
+  <!-- Login Section -->
+  <section class="login-hero text-white min-h-screen flex items-center">
+    <!-- Left Side: Logo -->
+    <div class="w-1/2 flex items-center justify-center">
+      <img src="assets/logo.png" alt="Finance Guru Logo" class="w-64 h-64">
+    </div>
 
-    <!-- Login Form -->
-    <form id="login-form" class="mb-6">
-      <h2 class="text-xl font-semibold text-gray-800 mb-4">Login</h2>
-      <input type="text" id="username" placeholder="Username" class="w-full p-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-      <input type="password" id="password" placeholder="Password" class="w-full p-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-      <button type="submit" class="w-full bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition duration-300">Login</button>
-    </form>
+    <!-- Right Side: Login Form -->
+    <div class="w-1/2 flex items-center justify-center">
+      <div class="bg-white p-8 rounded-lg shadow-lg w-96 text-center">
+        <h2 class="text-3xl font-bold text-gray-800 mb-4">Login</h2>
+        <p class="text-gray-600 mb-6">Manage your finances effectively and achieve your goals.</p>
 
-    <!-- Google Login -->
-    <button id="google-login" class="w-full bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition duration-300 mb-6">Sign in with Google</button>
+        <!-- Login Form -->
+        <form id="login-form" class="space-y-4">
+          <div>
+            <label for="email" class="block text-sm text-gray-700 text-left mb-1">Email Address</label>
+            <input type="email" id="email" placeholder="Enter your email" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-600">
+          </div>
+          <div>
+            <label for="password" class="block text-sm text-gray-700 text-left mb-1">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-600">
+          </div>
+          <div class="text-right">
+            <a href="#" class="text-sm text-purple-600 hover:underline">Forgot Password?</a>
+          </div>
+          <button type="submit" class="w-full bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition duration-300">Login</button>
+        </form>
 
-    <!-- Registration Form -->
-    <form id="register-form" class="mb-6">
-      <h2 class="text-xl font-semibold text-gray-800 mb-4">Register</h2>
-      <input type="text" id="new-username" placeholder="Username" class="w-full p-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-      <input type="password" id="new-password" placeholder="Password" class="w-full p-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-      <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition duration-300">Register</button>
-    </form>
+        <!-- Login with Google -->
+        <div class="mt-6">
+          <button class="w-full bg-white border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-100 transition duration-300 flex items-center justify-center">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo" class="w-5 h-5 mr-2">
+            Login with Google
+          </button>
+        </div>
 
-    <!-- Skip to Landing Page -->
-    <button id="skip-login" onclick="window.location.href='index.html'" class="text-gray-600 hover:text-gray-800 transition duration-300">Skip to Landing Page</button>
-  </div>
+        <!-- Register Link -->
+        <div class="mt-6 text-sm text-gray-600">
+          New here? <a href="register.html" class="text-purple-600 hover:underline">Create an account</a>
+        </div>
 
-  <script src="scripts/main.js"></script>
+        <!-- Skip to Landing Page -->
+        <div class="mt-6">
+          <button onclick="window.location.href='index.html'" class="text-purple-600 hover:underline">Skip to Landing Page</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+  
+  document.getElementById('login-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem('token', data.token); // Store token in localStorage
+        window.location.href = 'index.html'; // Redirect to landing page
+      } else {
+        alert(data.message || 'Login failed');
+      }
+    } catch (err) {
+      alert('Server error');
+    }
+  });
+
+  </script>
 </body>
 </html>
