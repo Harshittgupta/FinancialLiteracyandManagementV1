@@ -6,7 +6,6 @@
   <title>Finance Management - Finance App</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
- 
 </head>
 <body class="bg-gray-100">
   
@@ -22,6 +21,7 @@
           <li><a href="index.html" class="text-gray-700 hover:text-green-500 transition duration-300">Home</a></li>
           <li><a href="financial-literacy.html" class="text-gray-700 hover:text-green-500 transition duration-300">Financial Literacy</a></li>
           <li><a href="login.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">Login</a></li>
+          <li><a href="#expense-tracker" class="text-gray-700 hover:text-green-500 transition duration-300">Expense Tracker</a></li>
         </ul>
       </nav>
     </div>
@@ -199,225 +199,380 @@
         </div>
       </div>
     </section>
-    <script>
-      const steps = document.querySelectorAll('.form-step');
-      const nextButtons = document.querySelectorAll('.next-step');
-      const prevButtons = document.querySelectorAll('.prev-step');
-      const progressCircles = document.querySelectorAll('.circle');
-      let currentStep = 0;
-    
-      // Function to show the current step
-      function showStep(step) {
-        steps.forEach((formStep, index) => {
-          formStep.classList.toggle('hidden', index !== step);
-          formStep.classList.toggle('active', index === step);
+
+    <!-- Expense Tracker Section -->
+    <section id="expense-tracker" class="mb-12">
+      <header class="text-center mt-24">
+        <h1 class="text-5xl font-extrabold">Expense Tracker</h1>
+        <p class="text-lg mt-2 font-light">Track and manage your expenses effectively</p>
+      </header>
+
+      <div class="container mx-auto py-8 px-4">
+        <div class="bg-white text-gray-800 rounded-lg shadow-lg p-6 mb-8">
+          <table id="expense-table" class="min-w-full table-auto border-collapse">
+            <thead>
+              <tr class="bg-purple-800 text-white">
+                <th class="px-4 py-2">#</th>
+                <th class="px-4 py-2">EXPENSE DATE *</th>
+                <th class="px-4 py-2">NAME</th>
+                <th class="px-4 py-2">CATEGORY *</th>
+                <th class="px-4 py-2">AMOUNT *</th>
+                <th class="px-4 py-2">DESCRIPTION</th>
+                <th class="px-4 py-2">ACTION</th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              <tr>
+                <td class="px-4 py-2">1</td>
+                <td class="px-4 py-2"><input type="date" required class="w-full px-2 py-1 rounded border"></td>
+                <td class="px-4 py-2"><input type="text" placeholder="Type to add" class="w-full px-2 py-1 rounded border"></td>
+                <td class="px-4 py-2">
+                  <select required class="w-full px-2 py-1 rounded border">
+                    <option value="">Select</option>
+                    <option value="food">Food</option>
+                    <option value="travel">Travel</option>
+                    <option value="entertainment">Entertainment</option>
+                    <option value="utilities">Utilities</option>
+                    <option value="shopping">Shopping</option>
+                    <option value="other">Other</option>
+                  </select>
+                </td>
+                <td class="px-4 py-2">
+                  <input type="number" placeholder="0.00" step="0.01" required class="w-full px-2 py-1 rounded border">
+                </td>
+                <td class="px-4 py-2"><input type="text" placeholder="Add description" class="w-full px-2 py-1 rounded border"></td>
+                <td class="px-4 py-2"><button class="delete-btn"><img src="https://img.icons8.com/ios-filled/50/ffffff/delete-forever.png" class="delete-icon" /></button></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="text-center mt-4">
+            <button id="add-row-btn" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg focus:outline-none">Add Row</button>
+            <button id="analyze-btn" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg focus:outline-none ml-4">Analyze Expenses</button>
+          </div>
+        </div>
+
+        <!-- Expense Summary -->
+        <div id="expense-summary" class="bg-white text-gray-800 rounded-lg shadow-lg p-6 mb-8 hidden">
+          <h2 class="text-2xl font-bold mb-4">Expense Summary</h2>
+          <div id="summary-content" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+
+        <!-- Expense Chart -->
+        <div id="expense-chart" class="bg-white text-gray-800 rounded-lg shadow-lg p-6 hidden">
+          <h2 class="text-2xl font-bold mb-4">Expense Breakdown by Category</h2>
+          <canvas id="chart"></canvas>
+        </div>
+      </div>
+
+      <script>
+        // Initialize expenses array
+        let expenses = [];
+
+        // Add row functionality
+        document.getElementById("add-row-btn").addEventListener("click", function () {
+          const tableBody = document.getElementById("table-body");
+
+          // Create a new row
+          const newRow = document.createElement("tr");
+
+          // Define the HTML content for the new row
+          newRow.innerHTML = `
+            <td class="px-4 py-2">${tableBody.children.length + 1}</td>
+            <td class="px-4 py-2"><input type="date" required class="w-full px-2 py-1 rounded border"></td>
+            <td class="px-4 py-2"><input type="text" placeholder="Type to add" class="w-full px-2 py-1 rounded border"></td>
+            <td class="px-4 py-2">
+              <select required class="w-full px-2 py-1 rounded border">
+                <option value="">Select</option>
+                <option value="food">Food</option>
+                <option value="travel">Travel</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="utilities">Utilities</option>
+                <option value="shopping">Shopping</option>
+                <option value="other">Other</option>
+              </select>
+            </td>
+            <td class="px-4 py-2">
+              <input type="number" placeholder="0.00" step="0.01" required class="w-full px-2 py-1 rounded border">
+            </td>
+            <td class="px-4 py-2"><input type="text" placeholder="Add description" class="w-full px-2 py-1 rounded border"></td>
+            <td class="px-4 py-2"><button class="delete-btn"><img src="https://img.icons8.com/ios-filled/50/ffffff/delete-forever.png" class="delete-icon" /></button></td>
+          `;
+
+          // Append the new row to the table body
+          tableBody.appendChild(newRow);
+
+          // Add delete functionality to the new row's delete button
+          newRow.querySelector(".delete-btn").addEventListener("click", function () {
+            tableBody.removeChild(newRow);
+            updateRowNumbers();
+          });
+
+          // Update row numbers
+          updateRowNumbers();
         });
-        progressCircles.forEach((circle, index) => {
-          circle.classList.toggle('bg-green-500', index <= step);
-          circle.classList.toggle('bg-gray-300', index > step);
+
+        // Analyze expenses
+        document.getElementById("analyze-btn").addEventListener("click", function () {
+          const rows = document.querySelectorAll("#table-body tr");
+          expenses = [];
+
+          rows.forEach((row) => {
+            const date = row.querySelector("input[type='date']").value;
+            const name = row.querySelector("input[type='text']").value;
+            const category = row.querySelector("select").value;
+            const amount = parseFloat(row.querySelector("input[type='number']").value);
+            const description = row.querySelectorAll("input[type='text']")[1].value;
+
+            if (date && name && category && amount) {
+              expenses.push({ date, name, category, amount, description });
+            }
+          });
+
+          // Display summary
+          displaySummary();
+          // Display chart
+          displayChart();
         });
-      }
-    
-      // Global object to store budget data
-      const budgetData = {
-        income: 0,
-        housing: 0,
-        transportation: 0,
-        education: 0,
-        personal: 0,
-        savings: 0,
-      };
-    
-      // Pie Chart Initialization
-      const ctx = document.getElementById('pieChart').getContext('2d');
-      const pieChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-          labels: ['Income', 'Housing', 'Transportation', 'Education', 'Personal', 'Savings'],
-          datasets: [
-            {
-              data: [0, 0, 0, 0, 0, 0],
-              backgroundColor: ['#4CAF50', '#FF9800', '#2196F3', '#FFC107', '#E91E63', '#9C27B0'],
-              borderWidth: 0, // Removes the white border around pie chart segments
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                color: 'black', // Set legend label color to black
-                font: {
-                  size: 14, // Optional: Adjust font size for better visibility
+
+        // Display expense summary
+        function displaySummary() {
+          const summaryContent = document.getElementById("summary-content");
+          summaryContent.innerHTML = "";
+
+          const categories = {};
+          expenses.forEach((expense) => {
+            if (!categories[expense.category]) {
+              categories[expense.category] = 0;
+            }
+            categories[expense.category] += expense.amount;
+          });
+
+          for (const [category, total] of Object.entries(categories)) {
+            summaryContent.innerHTML += `
+              <div class="bg-gray-100 p-4 rounded-lg">
+                <h3 class="text-lg font-semibold">${category.toUpperCase()}</h3>
+                <p class="text-gray-700">Total: $${total.toFixed(2)}</p>
+              </div>
+            `;
+          }
+
+          // Show summary section
+          document.getElementById("expense-summary").classList.remove("hidden");
+        }
+
+        // Display expense chart
+        function displayChart() {
+          const categories = {};
+          expenses.forEach((expense) => {
+            if (!categories[expense.category]) {
+              categories[expense.category] = 0;
+            }
+            categories[expense.category] += expense.amount;
+          });
+
+          const ctx = document.getElementById("chart").getContext("2d");
+          new Chart(ctx, {
+            type: "pie",
+            data: {
+              labels: Object.keys(categories),
+              datasets: [
+                {
+                  data: Object.values(categories),
+                  backgroundColor: [
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56",
+                    "#4BC0C0",
+                    "#9966FF",
+                    "#FF9F40",
+                  ],
                 },
-              },
+              ],
             },
-          },
-        },
-      });
-    
-      // Function to update the pie chart
-      function updateChart() {
-        pieChart.data.datasets[0].data = Object.values(budgetData);
-        pieChart.update();
-      }
-    
-      // Function to calculate net income
-      function calculateNetIncome() {
-        const income = parseFloat(document.getElementById('salary').value || 0) + parseFloat(document.getElementById('other-income').value || 0);
-        const expenses =
-          budgetData.housing +
-          budgetData.transportation +
-          budgetData.education +
-          budgetData.personal +
-          budgetData.savings;
-        const netIncome = income - expenses;
-        document.getElementById('net-income-amount').textContent = netIncome.toFixed(2);
-      }
-    
-      // Event listeners for "Next" buttons
-      nextButtons.forEach((button) => {
-        button.addEventListener('click', () => {
-          // Update budget data based on the current step
-          if (currentStep === 0) {
-            budgetData.income =
-              parseFloat(document.getElementById('salary').value || 0) +
-              parseFloat(document.getElementById('other-income').value || 0);
-          } else if (currentStep === 1) {
-            budgetData.housing =
-              parseFloat(document.getElementById('mortgage').value || 0) +
-              parseFloat(document.getElementById('rent').value || 0) +
-              parseFloat(document.getElementById('insurance').value || 0) +
-              parseFloat(document.getElementById('repairs').value || 0) +
-              parseFloat(document.getElementById('Water/Gas/Electricity').value || 0) +
-              parseFloat(document.getElementById('Cable/tv/internet').value || 0) +
-              parseFloat(document.getElementById('Phone/Cell').value || 0);
-          } else if (currentStep === 2) {
-            budgetData.transportation =
-              parseFloat(document.getElementById('car-payment').value || 0) +
-              parseFloat(document.getElementById('fuel').value || 0) +
-              parseFloat(document.getElementById('car-insurance').value || 0) +
-              parseFloat(document.getElementById('car-repairs').value || 0);
-          } else if (currentStep === 3) {
-            budgetData.education =
-              parseFloat(document.getElementById('student-loan').value || 0) +
-              parseFloat(document.getElementById('books').value || 0) +
-              parseFloat(document.getElementById('college-tuition').value || 0);
-          } else if (currentStep === 4) {
-            budgetData.personal =
-              parseFloat(document.getElementById('groceries').value || 0) +
-              parseFloat(document.getElementById('entertainment').value || 0) +
-              parseFloat(document.getElementById('clothing').value || 0) +
-              parseFloat(document.getElementById('medical').value || 0) +
-              parseFloat(document.getElementById('pet-supplies').value || 0) +
-              parseFloat(document.getElementById('other').value || 0);
-          } else if (currentStep === 5) {
-            budgetData.savings =
-              parseFloat(document.getElementById('retirement').value || 0) +
-              parseFloat(document.getElementById('emergency-fund').value || 0) +
-              parseFloat(document.getElementById('investments').value || 0);
-          }
-    
-          // Move to the next step
-          if (currentStep < steps.length - 1) {
-            currentStep++;
-            showStep(currentStep);
-            updateChart();
-            calculateNetIncome();
-          }
+          });
+
+          // Show chart section
+          document.getElementById("expense-chart").classList.remove("hidden");
+        }
+
+        // Function to update the row numbers after a row is deleted or added
+        function updateRowNumbers() {
+          const rows = document.querySelectorAll("#table-body tr");
+          rows.forEach((row, index) => {
+            row.children[0].textContent = index + 1;
+          });
+        }
+
+        // Add delete functionality to the existing row
+        document.querySelectorAll(".delete-btn").forEach((button) => {
+          button.addEventListener("click", function () {
+            const row = button.closest("tr");
+            row.remove();
+            updateRowNumbers();
+          });
         });
-      });
-    
-      // Event listeners for "Back" buttons
-      prevButtons.forEach((button) => {
-        button.addEventListener('click', () => {
-          if (currentStep > 0) {
-            currentStep--;
-            showStep(currentStep);
-          }
-        });
-      });
-    
-      // Initialize the first step and chart
-      showStep(currentStep);
-      updateChart();
-    </script>
-<!-- Currency Converter Section -->
-<section id="currency-converter" class="mb-12">
-  <div class="bg-white p-8 rounded-lg shadow-lg">
-    <h3 class="text-3xl font-bold text-gray-800 mb-6">Currency Converter</h3>
-    <form id="currency-form" class="space-y-4">
-      <!-- Amount Input -->
-      <label for="amount" class="block text-sm mb-2">Amount:</label>
-      <input type="number" id="amount" placeholder="Enter amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4" required>
+      </script>
+    </section>
 
-      <!-- From Currency Dropdown -->
-      <label for="from" class="block text-sm mb-2">From:</label>
-      <select id="from" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4" required>
-        <option value="USD">USD</option>
-        <option value="EUR">EUR</option>
-        <option value="INR">INR</option>
-        <option value="GBP">GBP</option>
-        <option value="JPY">JPY</option>
-        <option value="AUD">AUD</option>
-      </select>
+    <!-- Currency Converter Section -->
+    <section id="currency-converter" class="mb-12">
+      <div class="bg-white p-8 rounded-lg shadow-lg">
+        <h3 class="text-3xl font-bold text-gray-800 mb-6">Currency Converter</h3>
+        <form id="currency-form" class="space-y-4">
+          <!-- Amount Input -->
+          <label for="amount" class="block text-sm mb-2">Amount:</label>
+          <input type="number" id="amount" placeholder="Enter amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4" required>
 
-      <!-- To Currency Dropdown -->
-      <label for="to" class="block text-sm mb-2">To:</label>
-      <select id="to" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4" required>
-        <option value="USD">USD</option>
-        <option value="EUR">EUR</option>
-        <option value="INR">INR</option>
-        <option value="GBP">GBP</option>
-        <option value="JPY">JPY</option>
-        <option value="AUD">AUD</option>
-      </select>
+          <!-- From Currency Dropdown -->
+          <label for="I understand that you want to keep all three features: the budgeting tool, the currency converter, and the expense tracker integrated into the `finance-management.html` file. I will ensure that the budgeting tool is retained while integrating the expense tracker.
 
-      <!-- Convert Button -->
-      <button type="submit" class="w-full bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300">Convert</button>
-    </form>
+### Updated Plan:
+1. **Remove `expense-tracker.html`**: This step has already been completed.
+2. **Update `finance-management.html`**:
+   - **Add Navigation Link**: Include a link to the expense tracker in the navigation bar.
+   - **Insert Expense Tracker Section**: Copy the relevant HTML structure from `expense-tracker.html` and insert it into `finance-management.html` under a new section titled "Expense Tracker".
+   - **Ensure Unique IDs**: Check for any ID conflicts and rename them if necessary.
+   - **Retain Budgeting Tool**: Ensure that the existing budgeting tool section remains intact.
 
-    <!-- Conversion Result -->
-    <div id="conversion-result" class="mt-6 text-center text-xl font-semibold text-gray-800"></div>
-  </div>
-</section>
+3. **JavaScript Integration**:
+   - **Merge Scripts**: Integrate the JavaScript from the expense tracker into `finance-management.html`, ensuring that all functions work correctly without conflicts.
+   - **Event Listeners**: Ensure that event listeners for buttons (like adding rows and analyzing expenses) are properly set up in the new context.
 
-<!-- JavaScript for Currency Converter -->
-<script>
-  // Mock exchange rates (replace with real API later)
-  const exchangeRates = {
-    USD: 1,
-    EUR: 0.85,
-    INR: 75,
-    GBP: 0.73,
-    JPY: 110,
-    AUD: 1.35,
-  };
+4. **Styling**:
+   - **Tailwind CSS**: Confirm that Tailwind CSS is already included in `finance-management.html`.
+   - **Custom Styles**: If any custom styles from `expense-tracker.html` are necessary, they should be added to the `<style>` section of `finance-management.html`.
 
-  // Currency Converter Form Submission
-  document.getElementById('currency-form').addEventListener('submit', function (e) {
-    e.preventDefault();
+5. **Testing**:
+   - After making the changes, thoroughly test the functionality of all three features to ensure everything works as intended.
 
-    // Get input values
-    const amount = parseFloat(document.getElementById('amount').value);
-    const fromCurrency = document.getElementById('from').value;
-    const toCurrency = document.getElementById('to').value;
+I will now proceed to update the `finance-management.html` file to include the expense tracker while retaining the budgeting tool. 
 
-    // Validate amount
-    if (isNaN(amount) || amount <= 0) {
-      alert('Please enter a valid amount.');
-      return;
-    }
+<create_file>
+<path>finance-management.html</path>
+<content>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finance Management - Finance App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+  
+  <!-- Header -->
+  <header class="bg-white shadow-md">
+    <div class="container mx-auto flex justify-between items-center p-4">
+      <div class="flex items-center">
+        <img src="assets/logo.png" alt="Finance App Logo" class="h-10 mr-2">
+        <h1 class="text-2xl font-bold text-gray-800">Finance App</h1>
+      </div>
+      <nav>
+        <ul class="flex space-x-6">
+          <li><a href="index.html" class="text-gray-700 hover:text-green-500 transition duration-300">Home</a></li>
+          <li><a href="financial-literacy.html" class="text-gray-700 hover:text-green-500 transition duration-300">Financial Literacy</a></li>
+          <li><a href="login.html" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">Login</a></li>
+          <li><a href="#expense-tracker" class="text-gray-700 hover:text-green-500 transition duration-300">Expense Tracker</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-    // Perform conversion
-    const fromRate = exchangeRates[fromCurrency];
-    const toRate = exchangeRates[toCurrency];
-    const convertedAmount = (amount / fromRate) * toRate;
+  <!-- Main Content -->
+  <main class="container mx-auto p-6">
+    <!-- Introduction Section -->
+    <section class="mb-12 text-center">
+      <h2 class="text-4xl font-bold text-gray-800 mb-4">Finance Management</h2>
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        Take control of your finances with our powerful tools. Whether you're budgeting, tracking expenses, or converting currencies, we've got you covered.
+      </p>
+      <div class="mt-8 flex justify-center space-x-4">
+        <a href="#budgeting-tool" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition duration-300">Budgeting Tool</a>
+        <a href="#currency-converter" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300">Currency Converter</a>
+      </div>
+    </section>
 
-    // Display result
-    const resultElement = document.getElementById('conversion-result');
-    resultElement.textContent = `${amount.toFixed(2)} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}`;
-  });
-</script>
+    <!-- Budgeting Tool Section -->
+    <section id="budgeting-tool" class="mb-12">
+      <div class="bg-white p-8 rounded-lg shadow-lg">
+        <h3 class="text-3xl font-bold text-gray-800 mb-6">Budgeting Tool</h3>
+        <div class="flex flex-wrap sm:flex-nowrap gap-8">
+          <!-- Pie Chart -->
+          <div class="w-full sm:w-1/3">
+            <h4 class="text-xl font-semibold text-gray-800 mb-4">Monthly Budget Overview</h4>
+            <canvas id="pieChart" class="w-full h-64"></canvas>
+            <button id="net-income" class="mt-6 w-full py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300">
+              NET INCOME: $<span id="net-income-amount">0</span>
+            </button>
+          </div>
+
+          <!-- Form Container -->
+          <div class="w-full sm:w-2/3">
+            <!-- Progress Bar -->
+            <div class="progress-bar flex items-center justify-between mb-8">
+              <div class="step flex flex-col items-center">
+                <div class="circle w-10 h-10 flex items-center justify-center bg-green-500 text-white rounded-full font-bold">1</div>
+                <p class="mt-2 text-sm">Income</p>
+              </div>
+              <div class="line flex-grow h-1 bg-gray-300 mx-2"></div>
+              <div class="step flex flex-col items-center">
+                <div class="circle w-10 h-10 flex items-center justify-center bg-gray-300 text-purple-700 rounded-full font-bold">2</div>
+                <p class="mt-2 text-sm">Housing</p>
+              </div>
+              <div class="line flex-grow h-1 bg-gray-300 mx-2"></div>
+              <div class="step flex flex-col items-center">
+                <div class="circle w-10 h-10 flex items-center justify-center bg-gray-300 text-purple-700 rounded-full font-bold">3</div>
+                <p class="mt-2 text-sm">Transportation</p>
+              </div>
+              <div class="line flex-grow h-1 bg-gray-300 mx-2"></div>
+              <div class="step flex flex-col items-center">
+                <div class="circle w-10 h-10 flex items-center justify-center bg-gray-300 text-purple-700 rounded-full font-bold">4</div>
+                <p class="mt-2 text-sm">Educational</p>
+              </div>
+              <div class="line flex-grow h-1 bg-gray-300 mx-2"></div>
+              <div class="step flex flex-col items-center">
+                <div class="circle w-10 h-10 flex items-center justify-center bg-gray-300 text-purple-700 rounded-full font-bold">5</div>
+                <p class="mt-2 text-sm">Personal</p>
+              </div>
+              <div class="line flex-grow h-1 bg-gray-300 mx-2"></div>
+              <div class="step flex flex-col items-center">
+                <div class="circle w-10 h-10 flex items-center justify-center bg-gray-300 text-purple-700 rounded-full font-bold">6</div>
+                <p class="mt-2 text-sm">Savings</p>
+              </div>
+            </div>
+
+            <!-- Forms for Each Step -->
+            <div class="form-steps">
+              <!-- Step 1: Income -->
+              <div class="form-step active">
+                <h4 class="text-2xl font-bold mb-4">Monthly Income</h4>
+                <label for="salary" class="block text-sm mb-2">Salary/Wages</label>
+                <input type="number" id="salary" placeholder="Enter salary" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="other-income" class="block text-sm mb-2">Other Income</label>
+                <input type="number" id="other-income" placeholder="Enter other income" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <div class="form-buttons flex justify-end">
+                  <button class="next-step px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300">Next</button>
+                </div>
+              </div>
+
+              <!-- Step 2: Housing -->
+              <div class="form-step hidden">
+                <h4 class="text-2xl font-bold mb-4">Housing Expenses</h4>
+                <label for="mortgage" class="block text-sm mb-2">Mortgage</label>
+                <input type="number" id="mortgage" placeholder="Enter mortgage amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="rent" class="block text-sm mb-2">Rent</label>
+                <input type="number" id="rent" placeholder="Enter rent amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="home-insurance" class="block text-sm mb-2">Home Insurance</label>
+                <input type="number" id="insurance" placeholder="Enter Home Insurance amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="Repairs/Maintenance" class="block text-sm mb-2">Repairs/Maintenance</label>
+                <input type="number" id="repairs" placeholder="Enter Repairs/Maintenance amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="Water/Gas/Electricity" class="block text-sm mb-2">Water/Gas/Electricity</label>
+                <input type="number" id="Water/Gas/Electricity" placeholder="Enter Water/Gas/Electricity amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="Cable/tv/internet" class="block text-sm mb-2">Cable/tv/internet</label>
+                <input type="number" id="Cable/tv/internet" placeholder="Enter Cable/tv/internet amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <label for="Phone/Cell" class="block text-sm mb-2">Phone/Cell</label>
+                <input type="number" id="Phone/Cell" placeholder="Enter Phone/Cell amount" class="w-full px-3 py-2 rounded-md bg-gray-100 text-gray-800 mb-4">
+                <div class="form-buttons flex justify-between">
+                  <button class="prev-step px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-300">Back</button>
+                  <button class="next-step px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300">Next</button>
